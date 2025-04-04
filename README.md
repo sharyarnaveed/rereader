@@ -1,12 +1,12 @@
-# 📚 EduSwap - A Community-Powered Platform for Used School Books
+# 📚 ReReader - A Community-Powered Platform for Used School Books
 
-**EduSwap** is a full-stack platform that empowers parents and students to exchange, buy, or donate used school books. Whether you're looking to pass on books your child has outgrown or find affordable resources for the new school year, EduSwap makes it simple, social, and sustainable.
+**ReReader** is a full-stack platform that empowers parents and students to exchange, buy, or donate used school books. Whether you're looking to pass on books your child has outgrown or find affordable resources for the new school year, ReReader makes it simple, social, and sustainable.
 
 ---
 
 ## 🎯 Core Concept
 
-EduSwap is a user-friendly platform where:
+ReReader is a user-friendly platform where:
 - Parents can **list** used books for sale or donation.
 - Others can **buy** them at a low price or request them **for free** if marked as a donation.
 
@@ -70,8 +70,8 @@ EduSwap is a user-friendly platform where:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/eduswap.git
-   cd eduswap
+   git clone https://github.com/yourusername/ReReader.git
+   cd ReReader
 
 
 2. ** Figma Design**
