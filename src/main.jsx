@@ -6,7 +6,7 @@ import App from './App.jsx'
 import './index.css'
 import Home from "./Home/Home.jsx";
 import Constactus from "./Contact/Constactus.jsx";
-
+import Products from "./Products/Products.jsx";
 
 const router=createBrowserRouter(
   [
@@ -19,8 +19,11 @@ const router=createBrowserRouter(
         element:<Home/>
       }
       ,{
-        path:"/contact-us",
+        path:"/contact",
         element:<Constactus/>
+      },{
+        path:"/product",
+        element:<Products/>
       }
       ]
     }
