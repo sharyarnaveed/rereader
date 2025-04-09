@@ -137,7 +137,7 @@ const Products = () => {
             ))}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8 mb-16">
             {filteredProducts.map((product) => (
               <div
                 key={product.id}
@@ -153,12 +153,12 @@ const Products = () => {
                   <div className="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-500"></div>
 
                   {product.isNew && (
-                    <div className="absolute top-4 left-4 bg-white text-gray-800 text-xs py-1 px-2">
+                    <div className="absolute top-2 sm:top-4 left-2 sm:left-4 bg-white text-gray-800 text-[10px] sm:text-xs py-1 px-2">
                       NEW
                     </div>
                   )}
                   {product.discount && (
-                    <div className="absolute bottom-4 left-4 bg-gray-800 text-white text-xs py-1 px-2">
+                    <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 bg-gray-800 text-white text-[10px] sm:text-xs py-1 px-2">
                       {product.discount}% OFF
                     </div>
                   )}
@@ -166,47 +166,47 @@ const Products = () => {
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <Link
                       to={`/product-detail/${product.id}`}
-                      className="bg-white/90 text-gray-800 py-2 px-4 text-sm transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300"
+                      className="bg-white/90 text-gray-800 py-1.5 sm:py-2 px-3 sm:px-4 text-xs sm:text-sm transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300"
                     >
                       View Details
                     </Link>
                   </div>
                 </div>
 
-                <div className="p-5">
+                <div className="p-3 sm:p-5">
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-[var(--normalfont)] text-gray-800 group-hover:text-gray-600 transition-colors duration-300">
+                    <h3 className="font-[var(--normalfont)] text-sm sm:text-base text-gray-800 group-hover:text-gray-600 transition-colors duration-300">
                       {product.name}
                     </h3>
 
                     <div className="text-right">
                       {product.discount ? (
                         <div className="flex flex-col">
-                          <span className="text-sm font-medium text-gray-800">
+                          <span className="text-xs sm:text-sm font-medium text-gray-800">
                             $
                             {(
                               product.price *
                               (1 - product.discount / 100)
                             ).toFixed(2)}
                           </span>
-                          <span className="text-xs text-gray-400 line-through">
+                          <span className="text-[10px] sm:text-xs text-gray-400 line-through">
                             ${product.price.toFixed(2)}
                           </span>
                         </div>
                       ) : (
-                        <span className="text-sm font-medium text-gray-800">
+                        <span className="text-xs sm:text-sm font-medium text-gray-800">
                           ${product.price.toFixed(2)}
                         </span>
                       )}
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center text-xs text-gray-500 mb-3">
+                  <div className="flex justify-between items-center text-[10px] sm:text-xs text-gray-500 mb-3">
                     <span>{product.category}</span>
                     <div className="flex items-center">
                       <span className="mr-1">{product.rating}</span>
                       <svg
-                        className="w-3 h-3 text-gray-400"
+                        className="w-2.5 sm:w-3 h-2.5 sm:h-3 text-gray-400"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                       >
@@ -215,7 +215,7 @@ const Products = () => {
                     </div>
                   </div>
 
-                  <button className="w-full py-2 mt-3 bg-white border border-gray-200 text-gray-800 text-sm hover:bg-gray-800 hover:text-white transition-colors duration-300">
+                  <button className="w-full py-1.5 sm:py-2 mt-3 bg-white border border-gray-200 text-gray-800 text-xs sm:text-sm hover:bg-gray-800 hover:text-white transition-colors duration-300">
                     Add to Cart
                   </button>
                 </div>
