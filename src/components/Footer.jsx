@@ -5,8 +5,7 @@ const Footer = () => {
   const navLinks = [
     { label: "Home", url: "/" },
     { label: "Products", url: "/product" },
-    { label: "Categories", url: "/category" },
-    { label: "About", url: "/about" },
+    { label: "Policy", url: "/about" },
     { label: "Contact", url: "/contact" },
   ];
 

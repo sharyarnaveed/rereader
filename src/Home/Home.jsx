@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import bgimage from "../assets/img/bgimage.png";
 import Footer from "../components/Footer";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const categories = [
@@ -25,12 +26,13 @@ const Home = () => {
     },
   ];
 
+  const navigate=useNavigate()
   return (
     <>
       <Navbar />
 
       <main className="h-[90vh] flex items-center justify-center bg-white relative overflow-hidden">
-        {/* Enhanced background with overlay */}
+    
         <div
           className="absolute inset-0 z-0 before:absolute before:inset-0 before:bg-gradient-to-r before:from-white/90 before:to-transparent"
           style={{
@@ -40,7 +42,7 @@ const Home = () => {
           }}
         />
 
-        {/* Main content with enhanced typography and animations */}
+    
         <div className="max-w-4xl mx-auto px-4 py-16 text-center relative z-10">
           <div className="animate-fadeIn">
             <h1 className="text-7xl mb-8 font-headingfonts text-[#07484A] leading-tight relative">
@@ -55,9 +57,10 @@ const Home = () => {
               for everyone.
             </p>
             <button
-              className="bg-[#70908B] hover:bg-[#07484A] transition-all duration-300 
+              className="bg-[#70908B] hover:bg-[#07484A] transition-all duration-300 cursor-pointer
               text-white font-normalfont py-4 px-10 rounded-full text-lg
               hover:shadow-[0_4px_20px_rgba(112,144,139,0.3)] transform hover:-translate-y-1"
+              onClick={()=>navigate("/product")}
             >
               Shop Now
             </button>
@@ -65,7 +68,7 @@ const Home = () => {
         </div>
       </main>
 
-      {/* Enhanced categories section */}
+   
       <main className="py-24 bg-gradient-to-b from-white to-[#70908B]/5">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-5xl font-headingfonts text-[#07484A] text-center mb-20 relative inline-block">

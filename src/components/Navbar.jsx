@@ -7,8 +7,7 @@ const Navbar = () => {
   const navoptions = [
     { label: "Home", url: "/" },
     { label: "Products", url: "/product" },
-    { label: "Categories", url: "/category" },
-    { label: "About", url: "/about" },
+    { label: "Policy", url: "/Policy" },
     { label: "Contact", url: "/contact" },
   ];
 

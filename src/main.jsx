@@ -7,6 +7,8 @@ import './index.css'
 import Home from "./Home/Home.jsx";
 import Constactus from "./Contact/Constactus.jsx";
 import Products from "./Products/Products.jsx";
+import ProductDetail from "./Products/ProductDetail.jsx";
+import PriacyPolicy from "./Privacypolicy/PriacyPolicy.jsx";
 
 const router=createBrowserRouter(
   [
@@ -24,6 +26,14 @@ const router=createBrowserRouter(
       },{
         path:"/product",
         element:<Products/>
+      },
+      {
+        path:"/product-detail/:id",
+        element:<ProductDetail/>
+      },
+      {
+        path:"/policy",
+        element:<PriacyPolicy/>
       }
       ]
     }
