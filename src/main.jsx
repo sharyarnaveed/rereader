@@ -9,6 +9,12 @@ import Constactus from "./Contact/Constactus.jsx";
 import Products from "./Products/Products.jsx";
 import ProductDetail from "./Products/ProductDetail.jsx";
 import PriacyPolicy from "./Privacypolicy/PriacyPolicy.jsx";
+import Signup from "./Auth/Signup.jsx";
+import Signin from "./Auth/Signin.jsx";
+import ForgotPassword from "./Auth/ForgotPassword.jsx";
+import OtpVerification from "./Auth/Otpverification.jsx";
+import DashboardHome from "./Dashboard/DashboardHome.jsx";
+import UploadProduct from "./Dashboard/UploadProduct.jsx";
 
 const router=createBrowserRouter(
   [
@@ -34,7 +40,35 @@ const router=createBrowserRouter(
       {
         path:"/policy",
         element:<PriacyPolicy/>
+      },
+      {
+        path:"/signup",
+        element:<Signup/>
+      },
+      {
+        path:"/signin",
+        element:<Signin/>
+      },{
+        path:"/forgotpassword",
+        element:<ForgotPassword/>
+      },
+      {
+        path:"/otpverification",
+        element:<OtpVerification/>
+      },
+      {
+path:"/userdashboard",
+children:[
+  {
+    path:"/userdashboard",
+    element:<DashboardHome/>
+    },
+  {
+    path:"/userdashboard/upload",
+    element:<UploadProduct/>
+    }]
       }
+   
       ]
     }
   ]

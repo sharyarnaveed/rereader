@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,6 +10,8 @@ const Navbar = () => {
     { label: "Policy", url: "/Policy" },
     { label: "Contact", url: "/contact" },
   ];
+
+  const navigate=useNavigate()
 
   return (
     <nav className="bg-white">
@@ -66,7 +68,7 @@ const Navbar = () => {
                 />
               </svg>
             </div>
-            <button className="bg-[var(--btn-color)] text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-[var(--maintextcolor)]">
+            <button onClick={()=>navigate("/signin")} className="bg-[var(--btn-color)] text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-[var(--maintextcolor)]">
               Login
             </button>
           </div>
