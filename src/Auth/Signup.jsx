@@ -129,12 +129,7 @@ const Signup = () => {
                   className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
                   placeholder="ZIP/Postal Code"
                 />
-                <input
-                  type="text"
-                  required
-                  className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
-                  placeholder="Country"
-                />
+            
               </div>
 
               {/* Password Fields */}
