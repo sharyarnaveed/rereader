@@ -15,6 +15,8 @@ import ForgotPassword from "./Auth/ForgotPassword.jsx";
 import OtpVerification from "./Auth/Otpverification.jsx";
 import DashboardHome from "./Dashboard/DashboardHome.jsx";
 import UploadProduct from "./Dashboard/UploadProduct.jsx";
+import { Toaster } from "react-hot-toast"
+
 
 const router=createBrowserRouter(
   [
@@ -53,7 +55,7 @@ const router=createBrowserRouter(
         element:<ForgotPassword/>
       },
       {
-        path:"/otpverification",
+        path:"/otpverification/:id",
         element:<OtpVerification/>
       },
       {
@@ -76,7 +78,8 @@ children:[
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-
+<>
   <RouterProvider router={router}  />
-
+<Toaster position="top-right" reverseOrder={false} />
+</>
 )

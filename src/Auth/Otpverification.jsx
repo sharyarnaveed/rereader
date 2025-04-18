@@ -1,10 +1,17 @@
 import React from 'react';
+import { useLocation, useParams } from 'react-router-dom';
+
+
+
 
 const OtpVerification = () => {
+const location= useLocation();
+const userId=location.state?.userdata
+
+// {userId}
   return (
     <div className="min-h-screen flex items-center justify-center bg-white p-4">
       <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-2xl shadow-2xl animate-fadeIn">
-        
        
         <div className="text-center">
           <h2 className="text-4xl font-bold mb-2" 

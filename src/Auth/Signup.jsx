@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import GoogleAuthBtn from "../components/GoogleAuthBtn";
 import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 const Signup = () => {
   const {
     register,
@@ -17,18 +19,20 @@ const Signup = () => {
       lastname: "",
       email: "",
       phonenumber: "",
-      streetaddress: "",
+      address: "",
       city: "",
       state: "",
       zip: "",
       password: "",
-      confirmpassword: "",
+      confirmPassword: "",
       newsletter: false,
     },
   });
+  const navigate=useNavigate()
   const [Thecity, SetCity] = useState();
   const [filteredCities, setFilteredCities] = useState([]);
   const [showCityDropdown, setShowCityDropdown] = useState(false);
+  const [SubmitBtn, SetSubmitBtn] = useState(false);
   const getCitesapi = useCallback(async () => {
     try {
       const responce = await axios.post(
@@ -50,12 +54,46 @@ const Signup = () => {
   }, []);
 
   const handleSignup = async (data) => {
-    console.log(data);
+    console.log("Form Data:", data);
+    SetSubmitBtn(true);
+
+    try {
+      const res = await axios.post("/api/user/signup", data);
+      console.log("Signup successful", res.data);
+
+      if (res.data.success === false) {
+        toast.error(res.data.message || "Signup failed");
+      } else {
+        toast.success(
+          res.data.message ||
+            "Signup successful! Please check your email for verification."
+        );
+
+const userdata=res.data.data
+console.log(userdata);
+
+navigate(`/otpverification/${userdata}`, {
+  state: { userdata },
+  replace: true, // Replace the current entry in the history stack
+  }
+)
+
+      }
+    } catch (error) {
+      if (error.response) {
+        toast.error(error.response.data.message || "Signup failed");
+        console.error("Signup error response:", error.response.data);
+      } else {
+        toast.error("An unexpected error occurred");
+        console.error("Unexpected signup error:", error.message);
+      }
+    } finally {
+      SetSubmitBtn(false);
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8 relative">
-      {/* Add Home Icon Circle */}
       <Link
         to="/"
         className="absolute top-8 left-8 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm hover:shadow-md transition-shadow duration-300 group"
@@ -122,9 +160,15 @@ const Signup = () => {
                   type="text"
                   required
                   {...register("lastname", {
-                    required: true,
-                    minLength: 2,
-                    pattern: /^[A-Za-z]+$/,
+                    required: "Last Name is required",
+                    minLength: {
+                      value: 2,
+                      message: "Minlength is 2 Characters",
+                    },
+                    pattern: {
+                      value: /^[A-Za-z]+$/,
+                      message: "Only Alphabets allowed",
+                    },
                   })}
                   className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
                   placeholder="Last Name"
@@ -142,7 +186,7 @@ const Signup = () => {
                   required: "Email is required",
                   pattern: {
                     value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "Please enter a valid email address",
+                    message: "Email is not valid",
                   },
                 })}
                 className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
@@ -155,14 +199,11 @@ const Signup = () => {
                 type="tel"
                 required
                 {...register("phonenumber", {
-                  required: "Phone number is required",
-                  pattern: {
-                    value: /^\d{11}$/,
-                    message: "Phone number must be 11 digits",
-                  },
+                  required: "PHone Number is required",
+                  pattern: /^\d{11}$/,
                   maxLength: {
                     value: 11,
-                    message: "Phone number cannot exceed 11 digits",
+                    message: "Phone Should Be of 11 Characters",
                   },
                 })}
                 className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
@@ -178,14 +219,14 @@ const Signup = () => {
               <input
                 type="text"
                 required
-                {...register("streetaddress", { required: true })}
+                {...register("address", {
+                  required: "Address is required",
+                })}
                 className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
                 placeholder="Street Address"
               />
-              {errors.streetaddress && (
-                <p className="text-red-500 text-sm">
-                  {errors.streetaddress.message}
-                </p>
+              {errors.address && (
+                <p className="text-red-500 text-sm">{errors.address.message}</p>
               )}
               <div className="grid grid-cols-2 gap-4">
                 <div className="relative">
@@ -212,13 +253,8 @@ const Signup = () => {
                         // Delay hiding dropdown to allow click events to register
                         setTimeout(() => setShowCityDropdown(false), 200);
                       }}
-                      {...register("city", { required: true })}
+                      required
                     />
-                    {errors.city && (
-                      <p className="text-red-500 text-sm">
-                        {errors.city.message}
-                      </p>
-                    )}
                     {showCityDropdown && (
                       <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                         {filteredCities && filteredCities.length > 0 ? (
@@ -247,9 +283,8 @@ const Signup = () => {
                   required
                   {...register("state", { required: "State is required" })}
                   className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
-                  value={getValues("state") || ""}
                 >
-                  <option value="" disabled>
+                  <option value="" disabled selected>
                     Select State/Province
                   </option>
                   <option value="Punjab">Punjab</option>
@@ -260,9 +295,6 @@ const Signup = () => {
                   <option value="Azad Kashmir">Azad Kashmir</option>
                   <option value="Islamabad">Islamabad Capital Territory</option>
                 </select>
-                {errors.state && (
-                  <p className="text-red-500 text-sm">{errors.state.message}</p>
-                )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -277,20 +309,19 @@ const Signup = () => {
                   className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
                   placeholder="ZIP/Postal Code"
                 />
-                {errors.zip && (
-                  <p className="text-red-500 text-sm">{errors.zip.message}</p>
-                )}
               </div>
-
+              {errors.zip && (
+                <p className="text-red-500 text-sm">{errors.zip.message}</p>
+              )}
               {/* Password Fields */}
               <input
                 type="password"
                 required
                 {...register("password", {
-                  required: "Password Is Required",
+                  required: "Password is required",
                   minLength: {
                     value: 8,
-                    message: "Password must be at least 8 characters long",
+                    message: "Password should be at least 8 characters",
                   },
                 })}
                 className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
@@ -304,17 +335,20 @@ const Signup = () => {
               <input
                 type="password"
                 required
-                {...register("confirmpassword", {
-                  required: true,
+                {...register("confirmPassword", {
+                  required: {
+                    value: true,
+                    message: "Confirm Password is required",
+                  },
                   validate: (value) =>
                     value === getValues("password") || "Passwords do not match",
                 })}
                 className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
                 placeholder="Confirm Password"
               />
-              {errors.confirmpassword && (
+              {errors.confirmPassword && (
                 <p className="text-red-500 text-sm">
-                  {errors.confirmpassword.message}
+                  {errors.confirmPassword.message}
                 </p>
               )}
             </div>
@@ -324,8 +358,18 @@ const Signup = () => {
             <button
               type="submit"
               className="group cursor-pointer relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-normalfont rounded-lg text-white bg-[#70908B] hover:bg-[#07484A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#70908B] transition-colors duration-300"
+              disabled={SubmitBtn}
             >
-              Sign up
+              {SubmitBtn ? (
+                <div className="flex justify-center items-center">
+                  <div
+                    className="animate-spin rounded-full h-5 w-5 border-[#70908
+B] border-4 border-t-transparent"
+                  ></div>
+                </div>
+              ) : (
+                <span>Sign Up</span>
+              )}
             </button>
           </div>
 
