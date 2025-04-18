@@ -1,53 +1,57 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useForm } from "react-hook-form"
-import GoogleAuthBtn from '../components/GoogleAuthBtn';
-import axios from 'axios';
+import React, { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import GoogleAuthBtn from "../components/GoogleAuthBtn";
+import axios from "axios";
 const Signup = () => {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    mode: "onBlur",
+    defaultValues: {
+      firstname: "",
+      lastname: "",
+      email: "",
+      phonenumber: "",
+      streetaddress: "",
+      city: "",
+      state: "",
+      zip: "",
+      password: "",
+      confirmpassword: "",
+      newsletter: false,
+    },
+  });
+  const [Thecity, SetCity] = useState();
+  const [filteredCities, setFilteredCities] = useState([]);
+  const [showCityDropdown, setShowCityDropdown] = useState(false);
+  const getCitesapi = useCallback(async () => {
+    try {
+      const responce = await axios.post(
+        "https://countriesnow.space/api/v0.1/countries/cities",
+        {
+          country: "Pakistan",
+        }
+      );
 
-const {
-  register,
-  handleSubmit,
-  formState: { errors },
-}=useForm({
-  mode: "onBlur",
-  defaultValues:{
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    streetAddress: "",
-    city: "",
-    state: "",
-    zip: "",
-    password: "",
-    confirmPassword: "",
-    newsletter: false,
-  },
-})
-const [Thecity,SetCity]=useState()
-const getCitesapi=useCallback( async()=>{
-  try {
-    
-    const responce=await axios.post("https://countriesnow.space/api/v0.1/countries/cities",{
-      country:"Pakistan"
-    });  
+      const theSort = responce.data.data.sort();
+      SetCity(theSort);
+    } catch (error) {
+      console.log("error in getting cities", error);
+    }
+  }, []);
 
-   const theSort=responce.data.data.sort()
-   SetCity(theSort)
-    
-  } catch (error) {
-    console.log("error in getting cities",error);
-    
-  }
-  },[])
+  useEffect(() => {
+    getCitesapi();
+  }, []);
 
-useEffect(()=>
-{
-  getCitesapi()
-  
-},[])
-
+  const handleSignup = async (data) => {
+    console.log(data);
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8 relative">
@@ -75,20 +79,25 @@ useEffect(()=>
             Create an account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600 font-normalfont">
-            Already have an account?{' '}
-            <Link to="/signin" className="text-[#70908B] hover:text-[#07484A] transition-colors text-underline">
+            Already have an account?{" "}
+            <Link
+              to="/signin"
+              className="text-[#70908B] hover:text-[#07484A] transition-colors text-underline"
+            >
               Sign in
             </Link>
           </p>
         </div>
 
-        <form className="mt-8 space-y-6">
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit(handleSignup)}>
           <div className="space-y-4">
             {/* Google Sign In Button */}
-            <GoogleAuthBtn/>
+            <GoogleAuthBtn />
             <div className="relative flex items-center justify-center">
               <div className="border-t border-gray-300 w-full"></div>
-              <div className="absolute bg-white px-4 text-sm text-gray-500">or</div>
+              <div className="absolute bg-white px-4 text-sm text-gray-500">
+                or
+              </div>
             </div>
 
             {/* Personal Information */}
@@ -96,103 +105,218 @@ useEffect(()=>
               <div className="grid grid-cols-2 gap-4">
                 <input
                   type="text"
-                  
-                  {...register("firstname",{required:true,minLength:2,pattern:/^[A-Za-z]+$/})}
+                  {...register("firstname", {
+                    required: true,
+                    minLength: 2,
+                    pattern: /^[A-Za-z]+$/,
+                  })}
                   className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
                   placeholder="First Name"
                 />
+                {errors.firstname && (
+                  <p className="text-red-500 text-sm">
+                    {errors.firstname.message}
+                  </p>
+                )}
                 <input
                   type="text"
                   required
-                  {...register("lastname",{required:true,minLength:2,pattern:/^[A-Za-z]+$/})}
+                  {...register("lastname", {
+                    required: true,
+                    minLength: 2,
+                    pattern: /^[A-Za-z]+$/,
+                  })}
                   className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
                   placeholder="Last Name"
                 />
               </div>
-
+              {errors.lastname && (
+                <p className="text-red-500 text-sm">
+                  {errors.lastname.message}
+                </p>
+              )}
               <input
                 type="email"
                 required
-                {...register("email",{required:true,pattern:/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z]{2,}$/i})}
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Please enter a valid email address",
+                  },
+                })}
                 className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
                 placeholder="Email address"
               />
-
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email.message}</p>
+              )}
               <input
                 type="tel"
                 required
-                {...register("phonenumber",{required:true,pattern:/^\d{11}$/,maxLength:11})}
+                {...register("phonenumber", {
+                  required: "Phone number is required",
+                  pattern: {
+                    value: /^\d{11}$/,
+                    message: "Phone number must be 11 digits",
+                  },
+                  maxLength: {
+                    value: 11,
+                    message: "Phone number cannot exceed 11 digits",
+                  },
+                })}
                 className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
                 placeholder="Phone Number"
               />
 
+              {errors.phonenumber && (
+                <p className="text-red-500 text-sm">
+                  {errors.phonenumber.message}
+                </p>
+              )}
               {/* Address Information */}
               <input
                 type="text"
                 required
-                {...register("streetaddress",{required:true})}
+                {...register("streetaddress", { required: true })}
                 className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
                 placeholder="Street Address"
               />
-
+              {errors.streetaddress && (
+                <p className="text-red-500 text-sm">
+                  {errors.streetaddress.message}
+                </p>
+              )}
               <div className="grid grid-cols-2 gap-4">
-              <select
-  required
-  {...register("city", {required: true})}
-  className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
->
-  <option value="" disabled selected>Select City</option>
-  {Thecity && Thecity.map((city, index) => (
-    <option key={index} value={city}>{city}</option>
-   
-  ))}
-</select>
-<select
-  required
-  {...register("state", {required: true})}
-  className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
->
-  <option value="" disabled selected>Select State/Province</option>
-  <option value="Punjab">Punjab</option>
-  <option value="Sindh">Sindh</option>
-  <option value="Khyber Pakhtunkhwa">Khyber Pakhtunkhwa</option>
-  <option value="Balochistan">Balochistan</option>
-  <option value="Gilgit-Baltistan">Gilgit-Baltistan</option>
-  <option value="Azad Kashmir">Azad Kashmir</option>
-  <option value="Islamabad">Islamabad Capital Territory</option>
-</select>
+                <div className="relative">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Search city..."
+                      value={getValues("city") || ""}
+                      className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
+                      onClick={() => setShowCityDropdown(true)}
+                      onChange={(e) => {
+                        const searchTerm = e.target.value.toLowerCase();
+                        setValue("city", e.target.value);
+
+                        const filteredCities = Thecity
+                          ? Thecity.filter((city) =>
+                              city.toLowerCase().includes(searchTerm)
+                            )
+                          : [];
+                        setFilteredCities(filteredCities);
+                        setShowCityDropdown(true);
+                      }}
+                      onBlur={() => {
+                        // Delay hiding dropdown to allow click events to register
+                        setTimeout(() => setShowCityDropdown(false), 200);
+                      }}
+                      {...register("city", { required: true })}
+                    />
+                    {errors.city && (
+                      <p className="text-red-500 text-sm">
+                        {errors.city.message}
+                      </p>
+                    )}
+                    {showCityDropdown && (
+                      <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        {filteredCities && filteredCities.length > 0 ? (
+                          filteredCities.map((city, index) => (
+                            <div
+                              key={index}
+                              className="px-3 py-2 cursor-pointer hover:bg-gray-100"
+                              onClick={() => {
+                                setValue("city", city);
+                                setShowCityDropdown(false);
+                              }}
+                            >
+                              {city}
+                            </div>
+                          ))
+                        ) : (
+                          <div className="px-3 py-2 text-gray-500">
+                            No cities found
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <select
+                  required
+                  {...register("state", { required: "State is required" })}
+                  className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
+                  value={getValues("state") || ""}
+                >
+                  <option value="" disabled>
+                    Select State/Province
+                  </option>
+                  <option value="Punjab">Punjab</option>
+                  <option value="Sindh">Sindh</option>
+                  <option value="Khyber Pakhtunkhwa">Khyber Pakhtunkhwa</option>
+                  <option value="Balochistan">Balochistan</option>
+                  <option value="Gilgit-Baltistan">Gilgit-Baltistan</option>
+                  <option value="Azad Kashmir">Azad Kashmir</option>
+                  <option value="Islamabad">Islamabad Capital Territory</option>
+                </select>
+                {errors.state && (
+                  <p className="text-red-500 text-sm">{errors.state.message}</p>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <input
                   type="text"
                   required
-                  {...register("zip",{required:true,pattern:/^\d{5}$/,maxLength:5})}
+                  {...register("zip", {
+                    required: true,
+                    pattern: /^\d{5}$/,
+                    maxLength: 5,
+                  })}
                   className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
                   placeholder="ZIP/Postal Code"
                 />
-            
+                {errors.zip && (
+                  <p className="text-red-500 text-sm">{errors.zip.message}</p>
+                )}
               </div>
 
               {/* Password Fields */}
               <input
                 type="password"
                 required
-                {...register("password",{required:true,minLength:8})}
+                {...register("password", {
+                  required: "Password Is Required",
+                  minLength: {
+                    value: 8,
+                    message: "Password must be at least 8 characters long",
+                  },
+                })}
                 className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
                 placeholder="Password"
               />
-
+              {errors.password && (
+                <p className="text-red-500 text-sm">
+                  {errors.password.message}
+                </p>
+              )}
               <input
                 type="password"
                 required
-                {...register("confirmpassword",{required:true,validate:(value)=>value===getValues
-("password")||"Passwords do not match"})}
+                {...register("confirmpassword", {
+                  required: true,
+                  validate: (value) =>
+                    value === getValues("password") || "Passwords do not match",
+                })}
                 className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
                 placeholder="Confirm Password"
               />
-
-
+              {errors.confirmpassword && (
+                <p className="text-red-500 text-sm">
+                  {errors.confirmpassword.message}
+                </p>
+              )}
             </div>
           </div>
 
@@ -206,12 +330,18 @@ useEffect(()=>
           </div>
 
           <div className="text-xs text-gray-500 text-center">
-            By signing up, you agree to our{' '}
-            <Link to={"/terms"} className="text-[#70908B] hover:text-[#07484A] transition-colors underline">
+            By signing up, you agree to our{" "}
+            <Link
+              to={"/terms"}
+              className="text-[#70908B] hover:text-[#07484A] transition-colors underline"
+            >
               Terms of Service
-            </Link>{' '}
-            and{' '}
-            <Link to={"/policy"} className="text-[#70908B] hover:text-[#07484A] transition-colors underline">
+            </Link>{" "}
+            and{" "}
+            <Link
+              to={"/policy"}
+              className="text-[#70908B] hover:text-[#07484A] transition-colors underline"
+            >
               Privacy Policy
             </Link>
           </div>
