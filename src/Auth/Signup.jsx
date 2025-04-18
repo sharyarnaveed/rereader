@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form"
 import GoogleAuthBtn from '../components/GoogleAuthBtn';
 import axios from 'axios';
-import usecityStore from '../store/citiesStore';
 const Signup = () => {
 
 const {
