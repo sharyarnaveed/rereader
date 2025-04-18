@@ -39,7 +39,7 @@ const Signup = () => {
 
       console.log("cities", responce.data.data);
       const theSort = responce.data.data.sort();
-      addCities(theSort);
+      addCities([response.data.data.sort()]);
     } catch (error) {
       console.log("error in getting cities", error);
     }
@@ -163,12 +163,14 @@ const Signup = () => {
                   <option value="" disabled selected>
                     Select City
                   </option>
-                  {cities &&
-                    cities[0].map((city, index) => (
-                      <option key={index} value={city}>
-                        {city}
-                      </option>
-                    ))}
+                  {
+  cities[0].map((city, index) => (
+    <option key={index} value={city}>
+      {city}
+    </option>
+  ))
+
+  }
                 </select>
                 <select
                   required
