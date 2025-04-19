@@ -72,7 +72,7 @@ const Signup = () => {
 const userdata=res.data.data
 console.log(userdata);
 
-navigate(`/otpverification/${userdata}`, {
+navigate("/otpverification", {
   state: { userdata },
   replace: true, // Replace the current entry in the history stack
   }
