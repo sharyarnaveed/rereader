@@ -25,7 +25,6 @@ const Signup = () => {
       zip: "",
       password: "",
       confirmPassword: "",
-      newsletter: false,
     },
   });
   const navigate=useNavigate()

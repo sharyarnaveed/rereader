@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
@@ -10,6 +11,28 @@ const Navbar = () => {
     { label: "Policy", url: "/Policy" },
     { label: "Contact", url: "/contact" },
   ];
+
+
+// const getuserinfo=async()=>{
+
+// try {
+//   const responce=await axios.get("/api/user/getuser")
+//   console.log(responce.data);
+  
+// } catch (error) {
+//   console.log("error",error);
+  
+// }
+
+// }
+
+
+// useEffect(()=>
+// {
+//   getuserinfo()
+// })
+
+
 
   const navigate=useNavigate()
 

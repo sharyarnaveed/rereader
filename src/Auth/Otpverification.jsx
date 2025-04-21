@@ -1,10 +1,11 @@
 import React from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useNavigation, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 const OtpVerification = () => {
+  const navigate=useNavigate();
   const {
     register,
     handleSubmit,
@@ -19,35 +20,38 @@ const OtpVerification = () => {
   };
 
   const verifyotp = async (data) => {
- try {
-     if (!otpverify.userid) {
-       toast.error("Invalid", {
-         autoClose: 5000,
-       });
-       return;
-     }
- 
-     let JOinOtp = data.otp.join("");
-     otpverify.otp = JOinOtp;
-     console.log(JOinOtp);
- 
-     const responce = await axios.post("/api/user/verifyotp", otpverify);
-     console.log(responce.data);
-     if (responce.data.success) {
-       toast.success(responce.data.message, {
-         autoClose: 5000,
-       });
-     }
-     toast.error(responce.data.message, {
-       autoClose: 5000,
-     });
- } catch (error) {
-  console.log(error);
-  toast.error("An error occurred. Please try again.", {
-    autoClose: 5000,
-  }); 
-  
- }
+    try {
+      if (!otpverify.userid) {
+        toast.error("Invalid", {
+          autoClose: 5000,
+        });
+        return;
+      }
+
+      let JOinOtp = data.otp.join("");
+      otpverify.otp = JOinOtp;
+      console.log(JOinOtp);
+
+      const responce = await axios.post("/api/user/verifyotp", otpverify);
+      console.log(responce.data);
+      if (responce.data.success) {
+        toast.success(responce.data.message, {
+          autoClose: 5000,
+        });
+
+navigate("/")
+
+      } else {
+        toast.error(responce.data.message, {
+          autoClose: 5000,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("An error occurred. Please try again.", {
+        autoClose: 5000,
+      });
+    }
   };
   // {userId}
   return (
