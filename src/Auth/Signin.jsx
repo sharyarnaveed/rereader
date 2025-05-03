@@ -1,10 +1,49 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Signin = () => {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    mode: "onBlur",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const navigate = useNavigate();
+
+const onSubmit = async (data) => {
+try {
+  const res=await axios.post("/api/user/signin",data)
+  console.log(res.data.success,"res");
+  if(res.data.success){
+    toast.success("Login successful",{
+      duration:4000,
+    })
+navigate("/")
+  }
+} catch (error) {
+  console.log(error,"error");
+  toast.error("Inavlid credentials",{
+    duration:4000,
+  })
+  
+}
+
+}
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8 relative">
-      {/* Add Home Icon Circle */}
       <Link
         to="/"
         className="absolute top-8 left-8 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm hover:shadow-md transition-shadow duration-300 group"
@@ -28,14 +67,17 @@ const Signin = () => {
             Welcome Back
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600 font-normalfont">
-            Don't have an account?{' '}
-            <Link to="/signup" className="text-[#70908B] hover:text-[#07484A] transition-colors">
+            Don't have an account?{" "}
+            <Link
+              to="/signup"
+              className="text-[#70908B] hover:text-[#07484A] transition-colors"
+            >
               Sign up
             </Link>
           </p>
         </div>
 
-        <form className="mt-8 space-y-6">
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4">
             {/* Google Sign In Button */}
             <button
@@ -65,13 +107,22 @@ const Signin = () => {
 
             <div className="relative flex items-center justify-center">
               <div className="border-t border-gray-300 w-full"></div>
-              <div className="absolute bg-white px-4 text-sm text-gray-500">or</div>
+              <div className="absolute bg-white px-4 text-sm text-gray-500">
+                or
+              </div>
             </div>
 
             <div className="space-y-4">
               <input
                 type="email"
                 required
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+                    message: "Invalid email address",
+                  },
+                })}
                 className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
                 placeholder="Email address"
               />
@@ -80,6 +131,12 @@ const Signin = () => {
                 <input
                   type="password"
                   required
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 8,
+                    },
+                  })}
                   className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
                   placeholder="Password"
                 />
@@ -92,7 +149,10 @@ const Signin = () => {
                     type="checkbox"
                     className="h-4 w-4 text-[#70908B] focus:ring-[#70908B] border-gray-300 rounded"
                   />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-600">
+                  <label
+                    htmlFor="remember-me"
+                    className="ml-2 block text-sm text-gray-600"
+                  >
                     Remember me
                   </label>
                 </div>

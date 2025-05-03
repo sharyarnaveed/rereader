@@ -115,15 +115,10 @@ const ContactUs = () => {
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d22454.582227278835!2d72.9153536!3d33.9083264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38dfb1ec2cec8405%3A0xecea542d8a6b1d0a!2sPak-Austria%20Fachhochschule%20Institute%20of%20Applied%20Sciences%20and%20Technology!5e1!3m2!1sen!2s!4v1744176509630!5m2!1sen!2s"
                   width="600"
                   height="450"
-                 
-                  allowfullscreen=""
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
                 ></iframe>
               </div>
             </div>
-
-            {/* Contact Form */}
+            
             <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
               <h2 className="text-2xl font-bold text-[var(--maintextcolor)] font-[var(--headingfonts)] mb-6">
                 Send us a Message

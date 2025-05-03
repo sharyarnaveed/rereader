@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import bgimage from "../assets/img/bgimage.png";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
+import api from "../api";
 
 const Home = () => {
   const categories = [
@@ -26,7 +27,26 @@ const Home = () => {
     },
   ];
 
-  const navigate=useNavigate()
+
+  const checkaccountlogin=async()=>
+  {
+    try {
+      const responce= await api.post("")
+    } catch (error) {
+      console.log(error,"error in checkaccountlogin function");
+
+      
+    }
+  }
+
+useEffect(()=>
+{
+
+  checkaccountlogin()
+
+},[])
+
+  const navigate = useNavigate();
   return (
     <>
       <Navbar />
@@ -58,7 +78,7 @@ const Home = () => {
               className="bg-[#70908B] hover:bg-[#07484A] transition-all duration-300 cursor-pointer
               text-white font-normalfont py-3 sm:py-4 px-8 sm:px-10 rounded-full text-base sm:text-lg
               hover:shadow-[0_4px_20px_rgba(112,144,139,0.3)] transform hover:-translate-y-1"
-              onClick={()=>navigate("/product")}
+              onClick={() => navigate("/product")}
             >
               Shop Now
             </button>
@@ -97,7 +117,7 @@ const Home = () => {
         </div>
       </main>
 
-      <Footer/>
+      <Footer />
     </>
   );
 };
