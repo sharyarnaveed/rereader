@@ -1,7 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-
+import api from "../api";
+import Spinner from "../components/Spinner";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -12,29 +13,31 @@ const Navbar = () => {
     { label: "Contact", url: "/contact" },
   ];
 
+  const [spinnerstatus, setSpinnerstatus] = useState(false);
+  const [userloggedin, setUserloggedin] = useState(false);
+  const checkaccountlogin = async () => {
+    setSpinnerstatus(true);
 
-// const getuserinfo=async()=>{
+    try {
+      const responce = await api.get("/api/user/checklogin");
+      console.log(responce.data, "responce in checkaccountlogin function");
+      if (responce.data.success == true) {
+        setUserloggedin(true);
+        console.log("user is logged in");
+      }
+    } catch (error) {
+      console.log(error, "error in checkaccountlogin function");
+    } finally {
+      // Always set spinner to false when done, regardless of success or failure
+      setSpinnerstatus(false);
+    }
+  };
 
-// try {
-//   const responce=await axios.get("/api/user/getuser")
-//   console.log(responce.data);
-  
-// } catch (error) {
-//   console.log("error",error);
-  
-// }
+  useEffect(() => {
+    checkaccountlogin();
+  }, []);
 
-// }
-
-
-// useEffect(()=>
-// {
-//   getuserinfo()
-// })
-
-
-
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
   return (
     <nav className="bg-white">
@@ -91,9 +94,23 @@ const Navbar = () => {
                 />
               </svg>
             </div>
-            <button onClick={()=>navigate("/signin")} className="bg-[var(--btn-color)] text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-[var(--maintextcolor)]">
-              Login
-            </button>
+            {spinnerstatus ? (
+              <Spinner />
+            ) : userloggedin ? (
+              <button
+                onClick={() => navigate("/userdashboard")}
+                className="bg-[var(--btn-color)] text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-[var(--maintextcolor)]"
+              >
+                Account
+              </button>
+            ) : (
+              <button
+                onClick={() => navigate("/signin")}
+                className="bg-[var(--btn-color)] text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-[var(--maintextcolor)]"
+              >
+                Login
+              </button>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -153,9 +170,24 @@ const Navbar = () => {
                 className="w-full bg-gray-100 rounded-full py-2 px-4 focus:outline-none focus:ring-2 ring-[var(--btn-color)] text-sm"
               />
             </div>
-            <button className="mt-4 w-full bg-[var(--btn-color)] text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-[var(--maintextcolor)]">
-              Login
-            </button>
+            {/* Mobile menu login/account button */}
+            {spinnerstatus ? (
+              <Spinner />
+            ) : userloggedin ? (
+              <button
+                onClick={() => navigate("/userdashboard")}
+                className="mt-4 w-full bg-[var(--btn-color)] text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-[var(--maintextcolor)]"
+              >
+                Account
+              </button>
+            ) : (
+              <button
+                onClick={() => navigate("/signin")}
+                className="mt-4 w-full bg-[var(--btn-color)] text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-[var(--maintextcolor)]"
+              >
+                Login
+              </button>
+            )}
           </div>
         </div>
       )}

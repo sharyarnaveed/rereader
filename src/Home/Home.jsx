@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import bgimage from "../assets/img/bgimage.png";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
-import api from "../api";
+
 
 const Home = () => {
   const categories = [
@@ -28,23 +28,8 @@ const Home = () => {
   ];
 
 
-  const checkaccountlogin=async()=>
-  {
-    try {
-      const responce= await api.post("")
-    } catch (error) {
-      console.log(error,"error in checkaccountlogin function");
 
-      
-    }
-  }
 
-useEffect(()=>
-{
-
-  checkaccountlogin()
-
-},[])
 
   const navigate = useNavigate();
   return (
@@ -60,6 +45,7 @@ useEffect(()=>
             backgroundPosition: "center",
           }}
         />
+        
 
         <div className="max-w-4xl mx-auto px-4 py-8 sm:py-16 text-center relative z-10">
           <div className="animate-fadeIn">
