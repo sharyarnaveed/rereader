@@ -28,7 +28,7 @@ try {
   console.log(res.data.success,"res");
   if(res.data.success){
     toast.success("Login successful",{
-      duration:4000,
+      duration:2000,
     })
 navigate("/")
   }
