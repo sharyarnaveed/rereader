@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import api from "../api";
 import {
   FaBox,
@@ -17,7 +17,7 @@ const DashboardHome = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const checkaccountlogin = async () => {
+  const checkaccountlogin =  useCallback(async() => {
     setLoading(true);
     try {
       const response = await api.get("/api/user/checklogin");
@@ -30,7 +30,7 @@ const DashboardHome = () => {
       setLoading(false);
       navigate("/");
     }
-  };
+  });
 
   useEffect(() => {
     checkaccountlogin();
