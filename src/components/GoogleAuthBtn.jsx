@@ -1,8 +1,9 @@
 import React from 'react'
 
-const GoogleAuthBtn = () => {
+const GoogleAuthBtn = ({onClick}) => {
   return (
 <button
+onClick={onClick}
               type="button"
               className=" cursor-pointer w-full flex items-center justify-center gap-3 py-3 px-4 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#70908B] transition-all duration-300"
             >
