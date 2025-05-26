@@ -14,6 +14,7 @@ const OtpVerification = () => {
   const location = useLocation();
   const userId = location.state?.userdata;
 
+
   const otpverify = {
     userid: userId,
     otp: "",

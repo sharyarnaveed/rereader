@@ -91,6 +91,22 @@ navigate("/otpverification", {
     }
   };
 
+const handlegoogleauth=async()=>
+{
+  try {
+
+    window.location.href ="http://localhost:3000/api/user/auth/google/";
+  } catch (error) {
+    console.log(error, "error");
+    toast.error("Google Auth Failed", {
+      duration: 2000,
+    });
+    
+  }
+}
+
+
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8 relative">
       <Link
@@ -129,7 +145,7 @@ navigate("/otpverification", {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(handleSignup)}>
           <div className="space-y-4">
             {/* Google Sign In Button */}
-            <GoogleAuthBtn />
+           <GoogleAuthBtn onClick={handlegoogleauth} />
             <div className="relative flex items-center justify-center">
               <div className="border-t border-gray-300 w-full"></div>
               <div className="absolute bg-white px-4 text-sm text-gray-500">

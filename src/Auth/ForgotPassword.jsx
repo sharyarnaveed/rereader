@@ -1,7 +1,48 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import { useForm } from "react-hook-form";
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 const ForgotPassword = () => {
+const navigator= useNavigate()
+  const {
+    register,
+    handleSubmit,
+
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: ""
+    },
+  });
+  
+  const resetmail=async(data)=>
+  {
+try {
+  const responce=await axios.post("/api/user/resetmail",data)
+  if (responce.data.success)
+  {
+    toast.success(responce.data.message,{
+      duration:3000
+    })
+
+    const userdata=responce.data.data
+    navigator("/otpverification",{
+      state:{userdata},
+      replace: true,
+    })
+  }
+
+
+} catch (error) {
+  console.log(error,"error in resetting mail");
+  toast.error("error in resetting mail",{
+    duration:3000,
+  })
+}
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-8 sm:p-10 rounded-xl shadow-sm">
@@ -14,10 +55,19 @@ const ForgotPassword = () => {
           </p>
         </div>
 
-        <form className="mt-8 space-y-6">
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit(resetmail)}>
           <div className="space-y-4">
             <input
               type="email"
+              {
+                ...register("email",{
+                  required:"Email is Required",
+                  pattern:{
+                    value:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+                    message:"Invalid email adddress"
+                  },
+                })
+              }
               required
               className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
               placeholder="Email address"
