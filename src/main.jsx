@@ -16,6 +16,7 @@ import OtpVerification from "./Auth/Otpverification.jsx";
 import DashboardHome from "./Dashboard/DashboardHome.jsx";
 import UploadProduct from "./Dashboard/UploadProduct.jsx";
 import { Toaster } from "react-hot-toast"
+import Category from "./Category/Category.jsx";
 
 
 const router=createBrowserRouter(
@@ -57,6 +58,10 @@ const router=createBrowserRouter(
       {
         path:"/otpverification",
         element:<OtpVerification/>
+      },
+      {
+path:"/category/:categoryname",
+element: <Category/>
       },
       {
 path:"/userdashboard",

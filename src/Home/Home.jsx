@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import bgimage from "../assets/img/bgimage.png";
 import Footer from "../components/Footer";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 
 const Home = () => {
@@ -81,7 +81,7 @@ const Home = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
             {categories.map((category) => (
-              <div
+              <NavLink to={`/category/${category.name}`}
                 key={category.id}
                 className="group p-6 sm:p-10 rounded-xl border-2 border-[#70908B]/20 hover:border-[#70908B] 
                 transition-all duration-300 cursor-pointer bg-white hover:shadow-lg"
@@ -97,7 +97,7 @@ const Home = () => {
                     Explore →
                   </span>
                 </div>
-              </div>
+              </NavLink>
             ))}
           </div>
         </div>
