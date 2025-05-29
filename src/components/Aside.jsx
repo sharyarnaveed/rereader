@@ -1,6 +1,6 @@
 import React from 'react'
 import NavItem from './NavItem'
-import {  FaTachometerAlt, FaUpload, FaSignOutAlt } from 'react-icons/fa'
+import {  FaTachometerAlt, FaUpload, FaSignOutAlt, FaInfo } from 'react-icons/fa'
 import api from '../api'
 import toast from "react-hot-toast";
 import { useNavigate } from 'react-router-dom'
@@ -44,6 +44,8 @@ try {
       <div className="space-y-2">
         <NavItem icon={<FaTachometerAlt />} text="Dashboard" tolink="/userdashboard" />
         <NavItem icon={<FaUpload />} text="Upload Product" tolink="/userdashboard/upload" />
+        <NavItem icon={<FaInfo />} text="Product Info" tolink="/userdashboard/productdetail" />
+
       </div>
       <button 
         className="w-full px-4 py-2 mt-4 text-white bg-red-500 hover:bg-red-600 

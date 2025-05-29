@@ -1,11 +1,36 @@
 import React from "react";
 import { FaUpload } from "react-icons/fa";
 import Aside from "../components/Aside";
+import { useForm } from "react-hook-form";
 
 const UploadProduct = () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm({
+    mode: "onBlur",
+    defaultValues: {
+      producttitle: "",
+      productdescription: "",
+      saletype: "",
+      price: "",
+    },
+  });
+
+  const selectedoption = watch("saletype");
+
+  const saveproduct = async (data) => {
+    try {
+      console.log(data);
+    } catch (error) {
+      console.log("error in saving product", error);
+    }
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-50">
-      {/* Fixed Aside */}
       <div className="fixed inset-y-0 left-0">
         <Aside />
       </div>
@@ -19,7 +44,8 @@ const UploadProduct = () => {
             Upload New Product
           </h1>
 
-          <div
+          <form
+            onSubmit={handleSubmit(saveproduct)}
             className="bg-white rounded-lg p-6 shadow-sm space-y-6"
             style={{ fontFamily: "K2D, sans-serif" }}
           >
@@ -32,7 +58,23 @@ const UploadProduct = () => {
                 type="text"
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#07484A] focus:border-transparent"
                 placeholder="Enter product title"
+                {...register("producttitle", {
+                  required: "Product Title is required",
+                  minLength: {
+                    value: 6,
+                    message: "Minimum length is 6 characters",
+                  },
+                  pattern: {
+                    value: /^[A-Za-z0-9 ]+$/,
+                    message: "Only letters, numbers and spaces are allowed",
+                  },
+                })}
               />
+              {errors.producttitle && (
+                <p className="text-red-500 text-sm">
+                  {errors.producttitle.message}
+                </p>
+              )}
             </div>
 
             {/* Description Input */}
@@ -41,10 +83,22 @@ const UploadProduct = () => {
                 Description
               </label>
               <textarea
+                {...register("productdescription", {
+                  required: "Product Description is Required",
+                  minLength: {
+                    value: 10,
+                    message: "Minimum length is 10 characters",
+                  },
+                })}
                 rows="4"
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#07484A] focus:border-transparent"
                 placeholder="Enter product description"
               />
+              {errors.productdescription && (
+                <p className="text-red-500 text-sm">
+                  {errors.productdescription.message}
+                </p>
+              )}
             </div>
 
             <div>
@@ -52,19 +106,22 @@ const UploadProduct = () => {
                 Sale Type
               </label>
               <div className="flex gap-4">
-                <button
-                  type="button"
-                  className="flex-1 py-2 px-4 rounded-lg border border-gray-200 hover:bg-gray-50"
+                <select
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#07484A] focus:border-transparent bg-white appearance-none cursor-pointer"
+                  {...register("saletype", {
+                    required: "Select The Sale Type",
+                  })}
                 >
-                  Donation
-                </button>
-                <button
-                  type="button"
-                  className="flex-1 py-2 px-4 rounded-lg bg-[#07484A] text-white"
-                >
-                  Sell
-                </button>
+                  <option value="">Select sale type</option>
+                  <option value="sell">Sell</option>
+                  <option value="donation">Donation</option>
+                </select>
               </div>
+              {errors.saletype && (
+                <p className="text-red-500 text-sm">
+                  {errors.saletype.message}
+                </p>
+              )}
             </div>
 
             <div>
@@ -77,8 +134,20 @@ const UploadProduct = () => {
                   type="number"
                   className="w-full pl-8 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#07484A] focus:border-transparent"
                   placeholder="0.00"
+                  {...register("price", {
+                    validate: (value) => {
+                      if (selectedoption === "sell" && (!value || value <= 0)) {
+                        return "Price is required for selling items";
+                      }
+                      return true;
+                    },
+                  })}
+                  disabled={selectedoption === "donation"}
                 />
               </div>
+              {errors.price && (
+                <p className="text-red-500 text-sm">{errors.price.message}</p>
+              )}
             </div>
 
             <div>
@@ -103,12 +172,12 @@ const UploadProduct = () => {
             </div>
 
             <button
-              type="button"
+              type="submit"
               className="w-full bg-[#07484A] text-white py-3 rounded-lg hover:bg-[#70908B] transition-colors"
             >
               Upload Product
             </button>
-          </div>
+          </form>
         </div>
       </main>
     </div>
