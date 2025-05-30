@@ -2,6 +2,8 @@ import React from "react";
 import { FaUpload } from "react-icons/fa";
 import Aside from "../components/Aside";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import api from "../api";
 
 const UploadProduct = () => {
   const {
@@ -15,15 +17,41 @@ const UploadProduct = () => {
       producttitle: "",
       productdescription: "",
       saletype: "",
+      category:"",
       price: "",
     },
   });
+
+ const categories = [
+    { name: "Primary Class", description: "Classes 1 to 5/6", id: 1 },
+    { name: "Secondary Class", description: "Classes 6 to 10", id: 2 },
+    { name: "Higher Secondary Class", description: "Classes 11 to 12", id: 3 },
+    {
+      name: "Higher Education",
+      description: "Graduation and Post Graduation",
+      id: 4,
+    },
+    {
+      name: "Competitive Exams",
+      description: "UPSC, SSC, Banking, etc.",
+      id: 5,
+    },
+    {
+      name: "Professional Courses",
+      description: "Engineering, Medical, etc.",
+      id: 6,
+    },
+  ];
 
   const selectedoption = watch("saletype");
 
   const saveproduct = async (data) => {
     try {
       console.log(data);
+const responce= await api.post("/api/user/uploadporduct",data)
+console.log(responce);
+
+
     } catch (error) {
       console.log("error in saving product", error);
     }
@@ -123,6 +151,38 @@ const UploadProduct = () => {
                 </p>
               )}
             </div>
+  <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Category
+              </label>
+              <div className="flex gap-4">
+                <select
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#07484A] focus:border-transparent bg-white appearance-none cursor-pointer"
+                  {...register("category", {
+                    required: "Product Category",
+                  })}
+                >
+                  <option value="">Product Category</option>
+                  {
+                  categories.map((item)=>
+                  (
+                  
+                  <option key={item.id} value={item.name}>{item.name}</option>
+                  
+                  ))
+
+
+                  }
+                
+                </select>
+              </div>
+              {errors.saletype && (
+                <p className="text-red-500 text-sm">
+                  {errors.saletype.message}
+                </p>
+              )}
+            </div>
+
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
