@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaUpload } from "react-icons/fa";
 import Aside from "../components/Aside";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import api from "../api";
+import toast from "react-hot-toast";
 
 const UploadProduct = () => {
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm({
     mode: "onBlur",
@@ -17,12 +18,12 @@ const UploadProduct = () => {
       producttitle: "",
       productdescription: "",
       saletype: "",
-      category:"",
+      category: "",
       price: "",
     },
   });
 
- const categories = [
+  const categories = [
     { name: "Primary Class", description: "Classes 1 to 5/6", id: 1 },
     { name: "Secondary Class", description: "Classes 6 to 10", id: 2 },
     { name: "Higher Secondary Class", description: "Classes 11 to 12", id: 3 },
@@ -42,18 +43,45 @@ const UploadProduct = () => {
       id: 6,
     },
   ];
+  const ProductImage = watch("productImage");
 
   const selectedoption = watch("saletype");
+  const [btnloading, setBtnLoading] = useState(false);
 
   const saveproduct = async (data) => {
+    setBtnLoading(true);
     try {
       console.log(data);
-const responce= await api.post("/api/user/uploadporduct",data)
-console.log(responce);
+      const formData = new FormData();
+      formData.append("producttitle", data.producttitle);
+      formData.append("productdescription", data.productdescription);
+      formData.append("saletype", data.saletype);
+      formData.append("category", data.category);
+      formData.append("price", data.price);
+      formData.append("productImage", data.productImage[0]);
 
-
+      const responce = await api.post("/api/user/uploadproduct", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(responce.data);
+      if (responce.data.success) {
+        setBtnLoading(false);
+        toast.success(responce.data.message, {
+          duration: 2000,
+        });
+        reset(); // Changed from resizeTo() to reset()
+      } else {
+        setBtnLoading(false);
+        toast.error(responce.data.message, {
+          duration: 2000,
+        });
+      }
     } catch (error) {
       console.log("error in saving product", error);
+    } finally {
+      setBtnLoading(false);
     }
   };
 
@@ -151,7 +179,7 @@ console.log(responce);
                 </p>
               )}
             </div>
-  <div>
+            <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Category
               </label>
@@ -163,17 +191,11 @@ console.log(responce);
                   })}
                 >
                   <option value="">Product Category</option>
-                  {
-                  categories.map((item)=>
-                  (
-                  
-                  <option key={item.id} value={item.name}>{item.name}</option>
-                  
-                  ))
-
-
-                  }
-                
+                  {categories.map((item) => (
+                    <option key={item.id} value={item.name}>
+                      {item.name}
+                    </option>
+                  ))}
                 </select>
               </div>
               {errors.saletype && (
@@ -182,7 +204,6 @@ console.log(responce);
                 </p>
               )}
             </div>
-
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -215,27 +236,35 @@ console.log(responce);
                 Product Images
               </label>
               <div className="grid grid-cols-3 gap-4">
-                {[1, 2, 3].map((index) => (
-                  <div
-                    key={index}
-                    className="aspect-square rounded-lg border-2 border-dashed border-gray-200 hover:border-[#07484A] transition-colors cursor-pointer"
-                  >
-                    <div className="flex flex-col items-center justify-center h-full">
-                      <FaUpload className="text-gray-400 mb-2" />
-                      <span className="text-sm text-gray-500">
-                        Upload Image {index}
-                      </span>
-                    </div>
+                <div className="aspect-square rounded-lg border-2 border-dashed border-gray-200 hover:border-[#07484A] transition-colors cursor-pointer relative overflow-hidden">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    {...register(`productImage`, {
+                      required: "Product image is required"
+                    })}
+                  />
+                  <div className="flex flex-col items-center justify-center h-full pointer-events-none">
+                    <FaUpload className="text-gray-400 mb-2" />
+                    <span className="text-sm text-gray-500">Upload Image</span>
                   </div>
-                ))}
+                </div>
               </div>
+              {ProductImage && ProductImage[0] ? (
+                <p className="text-sm text-gray-600 mt-2">Selected: {ProductImage[0].name}</p>
+              ) : null}
+              {errors.productImage && (
+                <p className="text-red-500 text-sm">{errors.productImage.message}</p>
+              )}
             </div>
 
             <button
               type="submit"
               className="w-full bg-[#07484A] text-white py-3 rounded-lg hover:bg-[#70908B] transition-colors"
+              disabled={btnloading}
             >
-              Upload Product
+              {btnloading ? "Uploading..." : "Upload Product"}
             </button>
           </form>
         </div>
