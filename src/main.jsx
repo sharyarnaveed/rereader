@@ -17,7 +17,7 @@ import DashboardHome from "./Dashboard/DashboardHome.jsx";
 import UploadProduct from "./Dashboard/UploadProduct.jsx";
 import { Toaster } from "react-hot-toast"
 import Category from "./Category/Category.jsx";
-
+import Dasboardproductdetail from "./Dashboard/ProductDetail.jsx"
 
 const router=createBrowserRouter(
   [
@@ -73,7 +73,14 @@ children:[
   {
     path:"/userdashboard/upload",
     element:<UploadProduct/>
-    }]
+    },
+    {
+      path:"/userdashboard/productdetail",
+      element:<Dasboardproductdetail/>
+    }
+  
+  
+  ]
       }
    
       ]
