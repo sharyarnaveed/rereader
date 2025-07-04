@@ -1,11 +1,16 @@
 import React from "react";
-import { useLocation, useNavigate, useNavigation, useParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useNavigation,
+  useParams,
+} from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 const OtpVerification = () => {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -13,7 +18,6 @@ const OtpVerification = () => {
   } = useForm({});
   const location = useLocation();
   const userId = location.state?.userdata;
-
 
   const otpverify = {
     userid: userId,
@@ -40,8 +44,7 @@ const OtpVerification = () => {
           autoClose: 5000,
         });
 
-navigate("/")
-
+        navigate("/");
       } else {
         toast.error(responce.data.message, {
           autoClose: 5000,

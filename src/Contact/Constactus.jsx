@@ -118,7 +118,7 @@ const ContactUs = () => {
                 ></iframe>
               </div>
             </div>
-            
+
             <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
               <h2 className="text-2xl font-bold text-[var(--maintextcolor)] font-[var(--headingfonts)] mb-6">
                 Send us a Message

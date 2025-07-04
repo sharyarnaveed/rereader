@@ -154,7 +154,7 @@ const ProductDetail = () => {
                   {/* Product Image */}
                   <div className="relative h-48 overflow-hidden">
                     <img
-                      src={`http://localhost:3000/${product.image1}`}
+                      src={`http://localhost:3000/${product.image1.replace("public\\", "public/").replace(/\\/g, "/")}`}
                       alt={product.title}
                       className="w-full h-full object-cover"
                     />

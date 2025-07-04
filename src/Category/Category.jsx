@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 import { Link, useParams } from "react-router-dom";
 
 const Category = () => {
-    const id = useParams().categoryname;
+  const id = useParams().categoryname;
   console.log(id);
   const [activeCategory, setActiveCategory] = useState("All");
 
@@ -87,7 +87,6 @@ const Category = () => {
     },
   ];
 
- 
   return (
     <>
       <Navbar />
@@ -105,8 +104,7 @@ const Category = () => {
               functionality in mind
             </p>
           </div>
-      {id}
-
+          {id}
 
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8 mb-16">
             {products.map((product) => (

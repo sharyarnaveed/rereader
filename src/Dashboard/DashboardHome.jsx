@@ -17,7 +17,7 @@ const DashboardHome = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const checkaccountlogin =  useCallback(async() => {
+  const checkaccountlogin = useCallback(async () => {
     setLoading(true);
     try {
       const response = await api.get("/api/user/checklogin");

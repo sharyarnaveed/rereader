@@ -242,7 +242,7 @@ const UploadProduct = () => {
                     accept="image/*"
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                     {...register(`productImage`, {
-                      required: "Product image is required"
+                      required: "Product image is required",
                     })}
                   />
                   <div className="flex flex-col items-center justify-center h-full pointer-events-none">
@@ -252,10 +252,14 @@ const UploadProduct = () => {
                 </div>
               </div>
               {ProductImage && ProductImage[0] ? (
-                <p className="text-sm text-gray-600 mt-2">Selected: {ProductImage[0].name}</p>
+                <p className="text-sm text-gray-600 mt-2">
+                  Selected: {ProductImage[0].name}
+                </p>
               ) : null}
               {errors.productImage && (
-                <p className="text-red-500 text-sm">{errors.productImage.message}</p>
+                <p className="text-red-500 text-sm">
+                  {errors.productImage.message}
+                </p>
               )}
             </div>
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import NavItem from './NavItem'
 import {  FaTachometerAlt, FaUpload, FaSignOutAlt, FaInfo } from 'react-icons/fa'
+import { CiSettings } from "react-icons/ci";
 import api from '../api'
 import toast from "react-hot-toast";
 import { useNavigate } from 'react-router-dom'
@@ -45,6 +46,8 @@ try {
         <NavItem icon={<FaTachometerAlt />} text="Dashboard" tolink="/userdashboard" />
         <NavItem icon={<FaUpload />} text="Upload Product" tolink="/userdashboard/upload" />
         <NavItem icon={<FaInfo />} text="Product Info" tolink="/userdashboard/productdetail" />
+        <NavItem icon={<CiSettings />} text="Settings" tolink="/userdashboard/settings" />
+
 
       </div>
       <button 
