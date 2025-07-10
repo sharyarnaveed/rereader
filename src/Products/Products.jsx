@@ -1,97 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Products = () => {
   const [activeCategory, setActiveCategory] = useState("All");
-
-  const products = [
-    {
-      id: 1,
-      name: "Classic Reader Pro",
-      category: "E-Readers",
-      price: 129.99,
-      rating: 4.5,
-      image:
-        "https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-      description:
-        "Premium e-reader with extended battery life and paper-like display.",
-      isNew: true,
-      discount: null,
-    },
-    {
-      id: 2,
-      name: "BookMate Mini",
-      category: "Accessories",
-      price: 49.99,
-      rating: 4.2,
-      image:
-        "https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-      description:
-        "Compact reading stand with adjustable angles for maximum comfort.",
-      isNew: false,
-      discount: 10,
-    },
-    {
-      id: 3,
-      name: "LiteLamp Reading Light",
-      category: "Accessories",
-      price: 24.99,
-      rating: 4.8,
-      image:
-        "https://images.unsplash.com/photo-1517770413964-df8ca61194a6?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-      description: "Clip-on book light with adjustable brightness levels.",
-      isNew: true,
-      discount: null,
-    },
-    {
-      id: 4,
-      name: "PageKeeper Deluxe",
-      category: "Bookmarks",
-      price: 12.99,
-      rating: 4.3,
-      image:
-        "https://images.unsplash.com/photo-1535905557558-afc4877a26fc?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-      description: "Set of premium magnetic bookmarks that never fall out.",
-      isNew: false,
-      discount: 15,
-    },
-    {
-      id: 5,
-      name: "BookShelf Elite",
-      category: "Storage",
-      price: 199.99,
-      rating: 4.7,
-      image:
-        "https://images.unsplash.com/photo-1526243741027-444d633d7365?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-      description:
-        "Elegant bookshelf with adjustable compartments and integrated lighting.",
-      isNew: false,
-      discount: null,
-    },
-    {
-      id: 6,
-      name: "ReadTogether Bundle",
-      category: "Gift Sets",
-      price: 79.99,
-      rating: 4.9,
-      image:
-        "https://images.unsplash.com/photo-1512820790803-83ca734da794?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-      description:
-        "Perfect gift set for book lovers with multiple reading accessories.",
-      isNew: true,
-      discount: 20,
-    },
-  ];
+  const navigate = useNavigate();
+  const [products, SetProducts] = useState([]);
 
   const categories = [
     "All",
-    "E-Readers",
-    "Accessories",
-    "Bookmarks",
-    "Storage",
-    "Gift Sets",
+    "Primary Class",
+    "Secondary Class",
+    "Higher Secondary Class",
+    "Higher Education",
+    "Competitive Exams",
+    "Professional Courses",
   ];
 
   const handleCategoryChange = (category) => {
@@ -103,6 +28,19 @@ const Products = () => {
       ? products
       : products.filter((product) => product.category === activeCategory);
 
+  const getproducts = async () => {
+    try {
+      const responce = await axios.get("/api/user/allproducts");
+      console.log(responce.data);
+      SetProducts(responce.data.productdata);
+    } catch (error) {
+      console.log("error in getting products", errors);
+    }
+  };
+
+  useEffect(() => {
+    getproducts();
+  }, []);
   return (
     <>
       <Navbar />
@@ -140,13 +78,15 @@ const Products = () => {
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8 mb-16">
             {filteredProducts.map((product) => (
               <div
-                key={product.id}
+                key={product.productid}
                 className="group bg-white overflow-hidden transition-all duration-500"
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <img
-                    src={product.image}
-                    alt={product.name}
+                    src={`http://localhost:3000/${product.image1
+                      .replace("public\\", "public/")
+                      .replace(/\\/g, "/")}`}
+                    alt={product.producname}
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
 
@@ -157,26 +97,13 @@ const Products = () => {
                       NEW
                     </div>
                   )}
-                  {product.discount && (
-                    <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 bg-gray-800 text-white text-[10px] sm:text-xs py-1 px-2">
-                      {product.discount}% OFF
-                    </div>
-                  )}
 
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <Link
-                      to={`/product-detail/${product.id}`}
-                      className="bg-white/90 text-gray-800 py-1.5 sm:py-2 px-3 sm:px-4 text-xs sm:text-sm transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300"
-                    >
-                      View Details
-                    </Link>
-                  </div>
                 </div>
 
                 <div className="p-3 sm:p-5">
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="font-[var(--normalfont)] text-sm sm:text-base text-gray-800 group-hover:text-gray-600 transition-colors duration-300">
-                      {product.name}
+                      {product.producname}
                     </h3>
 
                     <div className="text-right">
@@ -201,22 +128,17 @@ const Products = () => {
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center text-[10px] sm:text-xs text-gray-500 mb-3">
-                    <span>{product.category}</span>
-                    <div className="flex items-center">
-                      <span className="mr-1">{product.rating}</span>
-                      <svg
-                        className="w-2.5 sm:w-3 h-2.5 sm:h-3 text-gray-400"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                      </svg>
-                    </div>
-                  </div>
+                  <button
+                    onClick={() =>
+                      navigate(`/product-detail`,{
+                        state:{product},
+                        replace:false
+                      })
 
-                  <button className="w-full py-1.5 sm:py-2 mt-3 bg-white border border-gray-200 text-gray-800 text-xs sm:text-sm hover:bg-gray-800 hover:text-white transition-colors duration-300">
-                    Add to Cart
+                    }
+                    className=" cursor-pointer w-full py-1.5 sm:py-2 mt-3 bg-white border border-gray-200 text-gray-800 text-xs sm:text-sm hover:bg-gray-800 hover:text-white transition-colors duration-300"
+                  >
+                    View Detail
                   </button>
                 </div>
               </div>

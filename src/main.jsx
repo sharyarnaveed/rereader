@@ -19,6 +19,8 @@ import { Toaster } from "react-hot-toast"
 import Category from "./Category/Category.jsx";
 import Dasboardproductdetail from "./Dashboard/ProductDetail.jsx"
 import Settings from "./Dashboard/Settings.jsx";
+import Information from "./Products/Information.jsx";
+
 
 const router=createBrowserRouter(
   [
@@ -38,7 +40,7 @@ const router=createBrowserRouter(
         element:<Products/>
       },
       {
-        path:"/product-detail/:id",
+        path:"/product-detail",
         element:<ProductDetail/>
       },
       {
@@ -63,6 +65,10 @@ const router=createBrowserRouter(
       {
 path:"/category/:categoryname",
 element: <Category/>
+      },
+      {
+path:"/inforamtion",
+element:<Information/>
       },
       {
 path:"/userdashboard",
