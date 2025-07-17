@@ -1,18 +1,38 @@
-import React, { useEffect } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import Footer from "../components/Footer";
+import api from "../api";
 
 const ProductDetail = () => {
   const navigate = useNavigate();
 const location=useLocation()
-
+const [Disbalebtn,SetDisableBtn]=useState(false)
   
  
   const product = location.state?.product;
   
+const checkauth=async()=>
+{
+  try {
+    const responce=await api.get("/api/user/checklogin");
+    if(responce.data.success)
+    {
+      SetDisableBtn(false)
+    }
+    else{
+      SetDisableBtn(true)
+    }
+    
+    
+  } catch (error) {
+    console.log("error in checking auth",error);
+    SetDisableBtn(true)
+  }
+}
 
 useEffect(()=>
 {
+  checkauth()
 window.scrollTo(0,0)
 },[])
 
@@ -63,7 +83,10 @@ window.scrollTo(0,0)
               <button onClick={()=>navigate("/inforamtion",{
                 state:{product},
                 replace:false
-              })} className="px-10 py-3 cursor-pointer bg-[var(--btn-color)] text-white rounded-lg font-medium font-[var(--normalfont)] shadow-md hover:bg-[var(--maintextcolor)] transition-colors">
+              })}
+              disabled={Disbalebtn}
+              className={Disbalebtn? "cursor-not-allowed px-10 py-3  bg-[var(--btn-color)] text-white rounded-lg font-medium font-[var(--normalfont)] shadow-md transition-colors":
+              "cursorpointer px-10 py-3 cursor-pointer bg-[var(--btn-color)] text-white rounded-lg font-medium font-[var(--normalfont)] shadow-md hover:bg-[var(--maintextcolor)] transition-colors"}>
                 Show Information
               </button>
 

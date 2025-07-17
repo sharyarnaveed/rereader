@@ -1,8 +1,48 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const ContactUs = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    mode: onblur,
+    defaultValues: {
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    },
+  });
+
+  const handlecontact = async(data) => {
+    try {
+      console.log(data);
+const responce=await axios.post("/api/user/contactus",data)
+console.log(responce.data);
+if(responce.data.success)
+{
+  toast.success(responce.data.message)
+  reset()
+}
+else{
+  toast.error(responce.data.message)
+
+}
+
+    } catch (error) {
+      console.log("error in contact us",error);
+  toast.error(responce.data.message)
+      
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -123,27 +163,49 @@ const ContactUs = () => {
               <h2 className="text-2xl font-bold text-[var(--maintextcolor)] font-[var(--headingfonts)] mb-6">
                 Send us a Message
               </h2>
-              <form className="space-y-6">
+              <form
+                onSubmit={handleSubmit(handlecontact)}
+                className="space-y-6"
+              >
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2 font-[var(--normalfont)]">
                     Your Name
                   </label>
                   <input
                     type="text"
+                    {...register("name", {
+                      required: "Name is Required",
+                      minLength: 2,
+                      pattern: /^[A-Za-z ]+$/,
+                    })}
                     className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[var(--btn-color)] focus:border-transparent outline-none transition-all font-[var(--normalfont)]"
-                    placeholder="John Doe"
+                    placeholder="Your Name"
                   />
                 </div>
-
+                {errors.name && (
+                  <p className="text-red-500 text-sm">{errors.name.message}</p>
+                )}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2 font-[var(--normalfont)]">
                     Email Address
                   </label>
                   <input
                     type="email"
+                    {...register("email", {
+                      required: "Email is required",
+                      pattern: {
+                        value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z]{2,}$/i,
+                        message: "Email is not valid",
+                      },
+                    })}
                     className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[var(--btn-color)] focus:border-transparent outline-none transition-all font-[var(--normalfont)]"
                     placeholder="john@example.com"
                   />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -152,9 +214,20 @@ const ContactUs = () => {
                   </label>
                   <input
                     type="text"
+                    {...register("subject", {
+                      required: "Subject is Required",
+                      minLength: 5,
+                      pattern: /^[A-Za-z ]+$/,
+                    })}
                     className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[var(--btn-color)] focus:border-transparent outline-none transition-all font-[var(--normalfont)]"
                     placeholder="How can we help?"
                   />
+
+                  {errors.subject && (
+                    <p className="text-red-500 text-sm">
+                      {errors.subject.message}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -163,9 +236,19 @@ const ContactUs = () => {
                   </label>
                   <textarea
                     rows="4"
+                    {...register("message", {
+                      required: "Message is required",
+                      minLength: 5,
+                      pattern: /^[A-Za-z0-9 ]+$/,
+                    })}
                     className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[var(--btn-color)] focus:border-transparent outline-none transition-all font-[var(--normalfont)]"
                     placeholder="Your message here..."
                   ></textarea>
+                  {errors.message && (
+                    <p className="text-red-500 text-sm">
+                      {errors.message.message}
+                    </p>
+                  )}
                 </div>
 
                 <button

@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FaUpload } from "react-icons/fa";
 import Aside from "../components/Aside";
 import { useForm } from "react-hook-form";
 import api from "../api";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const UploadProduct = () => {
   const {
     register,
     handleSubmit,
     watch,
+     setValue,
+    getValues,
     reset,
     formState: { errors },
   } = useForm({
@@ -20,6 +23,7 @@ const UploadProduct = () => {
       saletype: "",
       category: "",
       price: "",
+      city:""
     },
   });
 
@@ -59,7 +63,7 @@ const UploadProduct = () => {
       formData.append("category", data.category);
       formData.append("price", data.price);
       formData.append("productImage", data.productImage[0]);
-
+      formData.append("city",data.city)
       const responce = await api.post("/api/user/uploadproduct", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -84,6 +88,32 @@ const UploadProduct = () => {
       setBtnLoading(false);
     }
   };
+
+  const [Thecity, SetCity] = useState();
+  const [filteredCities, setFilteredCities] = useState([]);
+  const [showCityDropdown, setShowCityDropdown] = useState(false);
+  const getCitesapi = useCallback(async () => {
+    try {
+      const responce = await axios.post(
+        "https://countriesnow.space/api/v0.1/countries/cities",
+        {
+          country: "Pakistan",
+        }
+      );
+
+      const theSort = responce.data.data.sort();
+      SetCity(theSort);
+    } catch (error) {
+      console.log("error in getting cities", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    getCitesapi();
+  }, []);
+
+
+
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -230,6 +260,59 @@ const UploadProduct = () => {
                 <p className="text-red-500 text-sm">{errors.price.message}</p>
               )}
             </div>
+
+             <div className="relative">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Search city..."
+                      value={getValues("city") || ""}
+                      className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#70908B] focus:border-[#70908B] focus:z-10 sm:text-sm transition-colors"
+                      onClick={() => setShowCityDropdown(true)}
+                      onChange={(e) => {
+                        const searchTerm = e.target.value.toLowerCase();
+                        setValue("city", e.target.value);
+
+                        const filteredCities = Thecity
+                          ? Thecity.filter((city) =>
+                              city.toLowerCase().includes(searchTerm)
+                            )
+                          : [];
+                        setFilteredCities(filteredCities);
+                        setShowCityDropdown(true);
+                      }}
+                      onBlur={() => {
+                        // Delay hiding dropdown to allow click events to register
+                        setTimeout(() => setShowCityDropdown(false), 200);
+                      }}
+                      required
+                    />
+                    {showCityDropdown && (
+                      <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        {filteredCities && filteredCities.length > 0 ? (
+                          filteredCities.map((city, index) => (
+                            <div
+                              key={index}
+                              className="px-3 py-2 cursor-pointer hover:bg-gray-100"
+                              onClick={() => {
+                                setValue("city", city);
+                                setShowCityDropdown(false);
+                              }}
+                            >
+                              {city}
+                            </div>
+                          ))
+                        ) : (
+                          <div className="px-3 py-2 text-gray-500">
+                            No cities found
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">

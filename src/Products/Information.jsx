@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FaArrowLeft, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaStar, FaHeart, FaShare } from 'react-icons/fa';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -199,17 +199,9 @@ window.location.href=`tel:${phoneno}`
                     </button>
                   ) : (
                     <>
-                      <button className="flex-1 px-6 py-3 bg-[var(--btn-color)] text-white rounded-lg font-medium hover:bg-[var(--maintextcolor)] transition-colors">
-                        Buy Now
-                      </button>
-                      <button className="px-6 py-3 border border-[var(--btn-color)] text-[var(--btn-color)] rounded-lg font-medium hover:bg-[var(--btn-color)] hover:text-white transition-colors">
-                        <FaHeart />
-                      </button>
                     </>
                   )}
-                  <button className="px-6 py-3 border border-gray-300 text-gray-600 rounded-lg font-medium hover:bg-gray-50 transition-colors">
-                    <FaShare />
-                  </button>
+
                 </div>
               )}
             </div>

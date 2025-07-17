@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaTrash, FaCheck, FaEdit, FaEye } from "react-icons/fa";
 import Aside from "../components/Aside";
-import axios from "axios";
 import api from "../api";
 import toast from "react-hot-toast";
 
