@@ -10,8 +10,6 @@ const Signin = () => {
   const {
     register,
     handleSubmit,
-    setValue,
-    getValues,
     formState: { errors },
   } = useForm({
     mode: "onBlur",

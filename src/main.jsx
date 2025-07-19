@@ -20,6 +20,8 @@ import Category from "./Category/Category.jsx";
 import Dasboardproductdetail from "./Dashboard/ProductDetail.jsx"
 import Settings from "./Dashboard/Settings.jsx";
 import Information from "./Products/Information.jsx";
+import ForgotPasswordOtp from "./Auth/ForgotPasswordOtp.jsx";
+import ResetPassword from "./Auth/ResetPassword.jsx";
 
 
 const router=createBrowserRouter(
@@ -61,6 +63,14 @@ const router=createBrowserRouter(
       {
         path:"/otpverification",
         element:<OtpVerification/>
+      },
+       {
+        path:"/forgototpverification",
+        element:<ForgotPasswordOtp/>
+      },
+       {
+        path:"/resetpassword",
+        element:<ResetPassword/>
       },
       {
 path:"/category/:categoryname",

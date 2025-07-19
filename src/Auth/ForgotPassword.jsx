@@ -28,7 +28,7 @@ try {
     })
 
     const userdata=responce.data.data
-    navigator("/otpverification",{
+    navigator("/forgototpverification",{
       state:{userdata},
       replace: true,
     })
