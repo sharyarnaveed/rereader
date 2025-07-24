@@ -16,7 +16,10 @@ const DashboardHome = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-
+  const [totalProducts, setTotalproducts] = useState("");
+  const [totalSold, setTotalSold] = useState("");
+  const [totalAmount, setTotalAmount] = useState("");
+const [lastestProducts,SetLatestProducts]=useState([])
   const checkaccountlogin = useCallback(async () => {
     setLoading(true);
     try {
@@ -32,8 +35,23 @@ const DashboardHome = () => {
     }
   });
 
+  const getdashboardcount = async () => {
+    try {
+      const responce = await api.get("/api/user/dasboardcount");
+      setTotalAmount(responce.data.totalmade);
+      setTotalSold(responce.data.totalsold);
+      setTotalproducts(responce.data.totalproducts);
+      SetLatestProducts(responce.data.lastestProducts)
+      console.log(responce.data);
+      
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     checkaccountlogin();
+    getdashboardcount();
   }, []);
 
   return (
@@ -62,22 +80,18 @@ const DashboardHome = () => {
                 </header>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                  <StatsCard title="Products" value="124" icon={<FaBox />} />
+                  <StatsCard title="Products" value={totalProducts} icon={<FaBox />} />
                   <StatsCard
                     title="Sales"
-                    value="96"
+                    value={totalSold}
                     icon={<FaShoppingCart />}
                   />
                   <StatsCard
                     title="Revenue"
-                    value="$12,875"
+                    value={`Rs ${totalAmount}`}
                     icon={<FaDollarSign />}
                   />
-                  <StatsCard
-                    title="Growth"
-                    value="68%"
-                    icon={<FaChartLine />}
-                  />
+                 
                 </div>
 
                 {/* Recent Products */}
@@ -93,28 +107,28 @@ const DashboardHome = () => {
                         <tr>
                           <th className="px-6 py-3 text-left">Product</th>
                           <th className="px-6 py-3 text-left">Status</th>
-                          <th className="px-6 py-3 text-left">Sales</th>
-                          <th className="px-6 py-3 text-left">Revenue</th>
+                          <th className="px-6 py-3 text-left">Price</th>
+                          <th className="px-6 py-3 text-left">Category</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
-                        {[1, 2, 3, 4].map((item) => (
+                        {lastestProducts.map((item) => (
                           <tr
-                            onClick={() => navigate("/dashboard-productdetail")}
-                            key={item}
+                            onClick={() => navigate(`/userdashboard/dashboard-productdetail/${item.productid}`)}
+                            key={item.productid}
                             className="text-sm cursor-pointer"
                           >
-                            <td className="px-6 py-4">Product {item}</td>
+                            <td className="px-6 py-4">{item.producname}</td>
                             <td className="px-6 py-4">
                               <span className="px-2 py-1 text-xs rounded-full bg-green-50 text-green-700">
-                                Active
+                                {item.status}
                               </span>
                             </td>
                             <td className="px-6 py-4">
-                              {Math.floor(Math.random() * 100)}
+                             Rs {item.price}
                             </td>
                             <td className="px-6 py-4">
-                              ${Math.floor(Math.random() * 1000)}
+                              {item.category}
                             </td>
                           </tr>
                         ))}

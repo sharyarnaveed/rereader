@@ -22,6 +22,7 @@ import Settings from "./Dashboard/Settings.jsx";
 import Information from "./Products/Information.jsx";
 import ForgotPasswordOtp from "./Auth/ForgotPasswordOtp.jsx";
 import ResetPassword from "./Auth/ResetPassword.jsx";
+import Productinfo from "./Dashboard/Productinfo.jsx";
 
 
 const router=createBrowserRouter(
@@ -98,6 +99,10 @@ children:[
     {
       path:"/userdashboard/settings",
       element:<Settings/>
+    },
+        {
+      path:"/userdashboard/dashboard-productdetail/:productid",
+      element:<Productinfo/>
     }
   
   
