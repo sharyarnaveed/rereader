@@ -90,7 +90,7 @@ const [products, SetProducts] = useState([]);
           {/* Header */}
           <div className="mb-12 text-center">
             <h1 className="font-[var(--headingfonts)] text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Our Collection
+              Products
             </h1>
             <div className="w-20 h-1 bg-[#70908B] mx-auto mb-6 rounded"></div>
             <p className="text-gray-500 max-w-lg mx-auto text-base font-[var(--normalfont)]">
@@ -98,9 +98,9 @@ const [products, SetProducts] = useState([]);
             </p>
           </div>
 
-          {/* Filters */}
+      
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-10">
-            {/* City Search */}
+           
             <div className="w-full md:w-1/3 relative">
               <input
                 type="text"
@@ -214,7 +214,7 @@ const [products, SetProducts] = useState([]);
                   </div>
                   <button
                     onClick={() =>
-                      navigate(`/product-detail`, {
+                      navigate(`/product-detail/${product.productid}`, {
                         state: { product },
                         replace: false,
                       })
