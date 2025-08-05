@@ -3,35 +3,36 @@ import Navbar from "../components/Navbar";
 import bgimage from "../assets/img/bgimage.png";
 import Footer from "../components/Footer";
 import { NavLink, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 
 const Home = () => {
-  const categories = [
-    { name: "Primary Class", description: "Classes 1 to 5/6", id: 1 },
-    { name: "Secondary Class", description: "Classes 6 to 10", id: 2 },
-    { name: "Higher Secondary Class", description: "Classes 11 to 12", id: 3 },
-    {
-      name: "Higher Education",
-      description: "Graduation and Post Graduation",
-      id: 4,
-    },
-    {
-      name: "Competitive Exams",
-      description: "UPSC, SSC, Banking, etc.",
-      id: 5,
-    },
-    {
-      name: "Professional Courses",
-      description: "Engineering, Medical, etc.",
-      id: 6,
-    },
-  ];
 
 
+const [Allproduct,setAllproducts]=useState([])
 
 
 
   const navigate = useNavigate();
+
+const gethomeproducts=async()=>{
+  try {
+    const responce=await axios.get("/api/user/gethomproducts")
+    console.log(responce.data);
+    setAllproducts(responce.data.products)
+  } catch (error) {
+    console.log("error in getting products",error);
+    
+  }
+}
+useEffect(()=>{
+gethomeproducts()
+},[])
+
+
+
+
+
   return (
     <>
       <Navbar />
@@ -75,29 +76,69 @@ const Home = () => {
       <main className="py-12 sm:py-24 bg-gradient-to-b from-white to-[#70908B]/5">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-headingfonts text-[#07484A] text-center mb-10 sm:mb-20 relative inline-block">
-            Browse Categories
+            Browse Products
             <div className="absolute -bottom-3 sm:-bottom-4 left-1/2 transform -translate-x-1/2 w-16 sm:w-24 h-1 bg-[#70908B]/30" />
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
-            {categories.map((category) => (
-              <NavLink to={`/category/${category.name}`}
-                key={category.id}
-                className="group p-6 sm:p-10 rounded-xl border-2 border-[#70908B]/20 hover:border-[#70908B] 
-                transition-all duration-300 cursor-pointer bg-white hover:shadow-lg"
+            {Allproduct.map((product) => (
+              <div
+                key={product.productid}
+                className="group bg-white rounded-2xl shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
-                <h3 className="text-xl sm:text-2xl font-headingfonts text-[#07484A] mb-2">
-                  {category.name}
-                </h3>
-                <p className="text-[#70908B] font-normalfont text-sm sm:text-base">
-                  {category.description}
-                </p>
-                <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span className="text-[#07484A] font-normalfont text-sm">
-                    Explore →
-                  </span>
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <img
+                    src={`http://localhost:3000/${product.image1
+                      .replace("public\\", "public/")
+                      .replace(/\\/g, "/")}`}
+                    alt={product.producname}
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-500"></div>
+                  {product.isNew && (
+                    <div className="absolute top-3 left-3 bg-[#70908B] text-white text-xs py-1 px-3 rounded-full shadow">
+                      NEW
+                    </div>
+                  )}
                 </div>
-              </NavLink>
+                <div className="p-5">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-[var(--normalfont)] text-base font-semibold text-gray-800 group-hover:text-[#70908B] transition-colors duration-300">
+                      {product.producname}
+                    </h3>
+                    <div className="text-right">
+                      {product.discount ? (
+                        <div className="flex flex-col items-end">
+                          <span className="text-sm font-bold text-[#70908B]">
+                            ${(
+                              product.price *
+                              (1 - product.discount / 100)
+                            ).toFixed(2)}
+                          </span>
+                          <span className="text-xs text-gray-400 line-through">
+                            ${product.price.toFixed(2)}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-sm font-bold text-gray-800">
+                          ${product.price.toFixed(2)}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() =>
+                      navigate(`/product-detail/${product.productid}`, {
+                        state: { product },
+                        replace: false,
+                      })
+                    }
+                    className="w-full py-2 mt-3 bg-[#70908B] text-white rounded-lg font-medium text-sm hover:bg-gray-800 transition-colors duration-300"
+                  >
+                    View Detail
+                  </button>
+                </div>
+              </div>
             ))}
           </div>
         </div>

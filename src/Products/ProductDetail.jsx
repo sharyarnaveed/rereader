@@ -24,7 +24,23 @@ const ProductDetail = () => {
     }
   };
 
+  const checkaccountlogin = async () => {
+    try {
+      const responce = await api.get("/api/user/checklogin");
+      console.log(responce.data, "responce in checkaccountlogin function");
+      if (responce.data.success == true) {
+        console.log("user is logged in");
+      } else {
+        SetDisableBtn(true);
+      }
+    } catch (error) {
+      console.log(error, "error in checkaccountlogin function");
+      SetDisableBtn(true);
+    }
+  };
+
   useEffect(() => {
+    checkaccountlogin();
     window.scrollTo(0, 0);
     getproductdetail();
   }, [productid]);
@@ -87,6 +103,18 @@ const ProductDetail = () => {
                     Show Information
                   </button>
                 </div>
+                {Disbalebtn && (
+                  <div className="mt-4 text-red-500 font-[var(--normalfont)]">
+                    Please{" "}
+                    <span
+                      onClick={() => navigate("/signin")}
+                      className="text-[var(--btn-color)] underline cursor-pointer hover:text-[var(--maintextcolor)]"
+                    >
+                      sign in
+                    </span>{" "}
+                    to see the information.
+                  </div>
+                )}
               </div>
             </div>
           </div>
