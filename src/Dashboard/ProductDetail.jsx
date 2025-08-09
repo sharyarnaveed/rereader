@@ -3,9 +3,11 @@ import { FaTrash, FaCheck, FaEdit, FaEye } from "react-icons/fa";
 import Aside from "../components/Aside";
 import api from "../api";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const ProductDetail = () => {
   const [activeTab, setActiveTab] = useState("all");
+  const navigate = useNavigate();
 
   const [products, Setproducts] = useState([]);
 
@@ -153,7 +155,9 @@ const ProductDetail = () => {
                   {/* Product Image */}
                   <div className="relative h-48 overflow-hidden">
                     <img
-                      src={`http://localhost:3000/${product.image1.replace("public\\", "public/").replace(/\\/g, "/")}`}
+                      src={`http://localhost:3000/${product.image1
+                        .replace("public\\", "public/")
+                        .replace(/\\/g, "/")}`}
                       alt={product.title}
                       className="w-full h-full object-cover"
                     />
@@ -230,7 +234,20 @@ const ProductDetail = () => {
                         <FaTrash className="text-xs" />
                         Delete
                       </button>
-
+                      {product.status === "unsold" && (
+                        <button
+                          onClick={() =>
+                            navigate(
+                              `/userdashboard/editproduct/${product.productid}`
+                            )
+                          }
+                          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 text-sm font-medium"
+                          style={{ fontFamily: "K2D, sans-serif" }}
+                        >
+                          <FaTrash className="text-xs" />
+                          Edit
+                        </button>
+                      )}
                       {product.status === "unsold" && (
                         <button
                           onClick={() => handleMarkAsSold(product.productid)}
