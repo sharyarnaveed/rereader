@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import Footer from "../components/Footer";
 import api from "../api";
+import { unhashedpassword } from "../utils/hashproductid";
 
 const ProductDetail = () => {
   const { productid } = useParams();
@@ -14,7 +15,7 @@ const ProductDetail = () => {
     try {
       const responce = await api.get("/api/user/getproductdetails", {
         params: {
-          productid: productid,
+          productid: unhashedpassword(productid),
         },
       });
       console.log(responce.data.detail);

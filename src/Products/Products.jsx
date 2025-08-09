@@ -4,6 +4,8 @@ import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useForm, useWatch } from "react-hook-form";
+import { hashproductid } from "../utils/hashproductid";
+
 
 const Products = () => {
   const {
@@ -214,7 +216,7 @@ const [products, SetProducts] = useState([]);
                   </div>
                   <button
                     onClick={() =>
-                      navigate(`/product-detail/${product.productid}`, {
+                      navigate(`/product-detail/${hashproductid(product.productid)}`, {
                         state: { product },
                         replace: false,
                       })
